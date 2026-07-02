@@ -1,0 +1,234 @@
+{% extends 'pathforge/base.html' %}
+{% load static %}
+
+{% block title %}PathForge — Forge Your AI Career Path{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg">
+        <div class="hero-orb hero-orb-1"></div>
+        <div class="hero-orb hero-orb-2"></div>
+        <div class="hero-orb hero-orb-3"></div>
+        <div class="hero-grid"></div>
+    </div>
+    <div class="hero-content">
+        <div class="hero-badge">
+            <span class="badge-dot"></span>
+            AI-Powered Career Guidance
+        </div>
+        <h1 class="hero-title">
+            Turn Your Skills Into<br>
+            <span class="hero-gradient-text">Your Dream Career</span>
+        </h1>
+        <p class="hero-subtitle">
+            PathForge analyzes your current skills and builds a hyper-personalized,
+            week-by-week roadmap to your target job role. No guesswork. Just a clear path forward.
+        </p>
+        <div class="hero-actions">
+            <a href="{% url 'generate_roadmap' %}" class="btn-primary">
+                <span>Forge My Roadmap</span>
+                <span class="btn-icon">→</span>
+            </a>
+            <a href="{% url 'explore' %}" class="btn-secondary">See Examples</a>
+        </div>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <div class="stat-number">{{ stats.total_roadmaps }}+</div>
+                <div class="stat-label">Roadmaps Generated</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number">{{ stats.job_roles }}+</div>
+                <div class="stat-label">Job Roles Covered</div>
+            </div>
+            <div class="stat-divider"></div>
+            <div class="stat-item">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">AI Personalized</div>
+            </div>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="roadmap-preview">
+            <div class="preview-header">
+                <div class="preview-dots">
+                    <span></span><span></span><span></span>
+                </div>
+                <span class="preview-title">AI Roadmap — Full Stack Dev</span>
+            </div>
+            <div class="preview-phases">
+                <div class="preview-phase active">
+                    <div class="pp-icon">🏗️</div>
+                    <div class="pp-info">
+                        <div class="pp-name">Foundation</div>
+                        <div class="pp-weeks">6 weeks</div>
+                    </div>
+                    <div class="pp-bar">
+                        <div class="pp-fill" style="width:100%"></div>
+                    </div>
+                </div>
+                <div class="preview-phase">
+                    <div class="pp-icon">⚡</div>
+                    <div class="pp-info">
+                        <div class="pp-name">Core Skills</div>
+                        <div class="pp-weeks">10 weeks</div>
+                    </div>
+                    <div class="pp-bar">
+                        <div class="pp-fill" style="width:60%"></div>
+                    </div>
+                </div>
+                <div class="preview-phase">
+                    <div class="pp-icon">🚀</div>
+                    <div class="pp-info">
+                        <div class="pp-name">Advanced</div>
+                        <div class="pp-weeks">6 weeks</div>
+                    </div>
+                    <div class="pp-bar">
+                        <div class="pp-fill" style="width:20%"></div>
+                    </div>
+                </div>
+                <div class="preview-phase">
+                    <div class="pp-icon">🎯</div>
+                    <div class="pp-info">
+                        <div class="pp-name">Job Ready</div>
+                        <div class="pp-weeks">4 weeks</div>
+                    </div>
+                    <div class="pp-bar">
+                        <div class="pp-fill" style="width:0%"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="preview-skill-tags">
+                <span>React</span><span>Node.js</span><span>MongoDB</span><span>AWS</span>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- How It Works -->
+<section class="how-it-works">
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-tag">The Process</div>
+            <h2>How PathForge Works</h2>
+            <p>Three steps to your personalized career roadmap</p>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <div class="step-icon">🧠</div>
+                <h3>Input Your Profile</h3>
+                <p>Tell us your current skills, target role, experience level, and timeline. The more detail, the
+                    better.</p>
+            </div>
+            <div class="step-connector">→</div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <div class="step-icon">⚡</div>
+                <h3>AI Analysis</h3>
+                <p>Claude AI analyzes skill gaps, market demand, and learning paths to build your custom roadmap in
+                    seconds.</p>
+            </div>
+            <div class="step-connector">→</div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <div class="step-icon">🗺️</div>
+                <h3>Get Your Roadmap</h3>
+                <p>Receive a week-by-week plan with resources, projects, milestones, and interview preparation tips.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features -->
+<section class="features">
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-tag">Features</div>
+            <h2>Everything You Need to Succeed</h2>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card feature-large">
+                <div class="feature-icon">🎯</div>
+                <h3>Hyper-Personalized</h3>
+                <p>Unlike generic tutorials, PathForge analyzes YOUR specific skill gaps and creates a roadmap that
+                    starts exactly where you are.</p>
+                <div class="feature-tag">AI-Powered</div>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📅</div>
+                <h3>Week-by-Week Plan</h3>
+                <p>Clear phases with specific weekly goals, so you always know what to do next.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Curated Resources</h3>
+                <p>Hand-picked free and paid resources for each skill — no more searching endlessly.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💼</div>
+                <h3>Project Ideas</h3>
+                <p>Build real projects to demonstrate your skills to employers and fill your portfolio.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🏢</div>
+                <h3>Top Companies</h3>
+                <p>Know which companies are hiring for your target role in the Indian tech market.</p>
+            </div>
+            <div class="feature-card feature-large">
+                <div class="feature-icon">🎤</div>
+                <h3>Interview Preparation</h3>
+                <p>Role-specific interview topics and tips to help you ace technical and behavioral interviews at top
+                    companies.</p>
+                <div class="feature-tag">High Impact</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Recent Roadmaps -->
+{% if recent_roadmaps %}
+<section class="recent-roadmaps">
+    <div class="section-container">
+        <div class="section-header">
+            <div class="section-tag">Community</div>
+            <h2>Recently Generated Roadmaps</h2>
+            <p>See what paths others are forging</p>
+        </div>
+        <div class="roadmaps-grid">
+            {% for roadmap in recent_roadmaps %}
+            <a href="{% url 'roadmap_detail' roadmap.id %}" class="roadmap-card">
+                <div class="rc-header">
+                    <div class="rc-icon">🗺️</div>
+                    <div class="rc-meta">
+                        <span class="rc-weeks">{{ roadmap.total_weeks }} weeks</span>
+                        <span class="rc-difficulty">Difficulty: {{ roadmap.difficulty_score }}/10</span>
+                    </div>
+                </div>
+                <h3 class="rc-title">{{ roadmap.title|truncatechars:60 }}</h3>
+                <p class="rc-overview">{{ roadmap.overview|truncatechars:100 }}</p>
+                <div class="rc-footer">
+                    <span class="rc-date">{{ roadmap.created_at|date:"d M Y" }}</span>
+                    <span class="rc-cta">View Roadmap →</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="cta-container">
+        <div class="cta-orb"></div>
+        <h2>Ready to Forge Your Path?</h2>
+        <p>Join thousands of developers who used PathForge to land their dream job.</p>
+        <a href="{% url 'generate_roadmap' %}" class="btn-primary btn-large">
+            <span>Start for Free</span>
+            <span class="btn-icon">→</span>
+        </a>
+    </div>
+</section>
+{% endblock %}

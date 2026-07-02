@@ -1,0 +1,234 @@
+{% extends 'pathforge/base.html' %}
+{% load static %}
+
+{% block title %}Generate Your Roadmap — PathForge{% endblock %}
+
+{% block content %}
+<section class="generate-page">
+    <div class="gen-bg">
+        <div class="gen-orb gen-orb-1"></div>
+        <div class="gen-orb gen-orb-2"></div>
+    </div>
+    <div class="gen-container">
+        <div class="gen-header">
+            <div class="section-tag">AI Roadmap Generator</div>
+            <h1>Tell Us About Your Journey</h1>
+            <p>Fill in your profile and our AI will craft a personalized roadmap in seconds.</p>
+        </div>
+
+        {% if error %}
+        <div class="alert-error">⚠️ {{ error }}</div>
+        {% endif %}
+
+        <div class="gen-form-wrapper">
+            <form method="POST" action="{% url 'generate_roadmap' %}" id="roadmapForm">
+                {% csrf_token %}
+                
+                <!-- Step 1: Current Skills -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <span class="form-step-num">01</span>
+                        <div>
+                            <h3>Your Current Skills</h3>
+                            <p>What technologies, tools, or skills do you already know?</p>
+                        </div>
+                    </div>
+                    <div class="skill-examples">
+                        <span class="example-tag" onclick="appendSkill('Python')">+ Python</span>
+                        <span class="example-tag" onclick="appendSkill('JavaScript')">+ JavaScript</span>
+                        <span class="example-tag" onclick="appendSkill('HTML/CSS')">+ HTML/CSS</span>
+                        <span class="example-tag" onclick="appendSkill('SQL')">+ SQL</span>
+                        <span class="example-tag" onclick="appendSkill('React')">+ React</span>
+                        <span class="example-tag" onclick="appendSkill('Django')">+ Django</span>
+                        <span class="example-tag" onclick="appendSkill('Git')">+ Git</span>
+                        <span class="example-tag" onclick="appendSkill('Java')">+ Java</span>
+                    </div>
+                    <textarea 
+                        name="current_skills" 
+                        id="current_skills"
+                        class="form-textarea"
+                        placeholder="e.g. Python basics, HTML/CSS, some JavaScript. I've built a few simple web pages and understand basic programming concepts..."
+                        rows="4"
+                        required
+                    >{{ form_data.current_skills }}</textarea>
+                </div>
+
+                <!-- Step 2: Target Job -->
+                <div class="form-section">
+                    <div class="form-section-header">
+                        <span class="form-step-num">02</span>
+                        <div>
+                            <h3>Target Job Role</h3>
+                            <p>What position do you want to land?</p>
+                        </div>
+                    </div>
+                    <div class="skill-examples">
+                        <span class="example-tag" onclick="setTarget('Full Stack Developer')">Full Stack Developer</span>
+                        <span class="example-tag" onclick="setTarget('ML Engineer')">ML Engineer</span>
+                        <span class="example-tag" onclick="setTarget('Data Scientist')">Data Scientist</span>
+                        <span class="example-tag" onclick="setTarget('DevOps Engineer')">DevOps Engineer</span>
+                        <span class="example-tag" onclick="setTarget('Android Developer')">Android Developer</span>
+                        <span class="example-tag" onclick="setTarget('Backend Developer')">Backend Developer</span>
+                        <span class="example-tag" onclick="setTarget('UI/UX Designer')">UI/UX Designer</span>
+                        <span class="example-tag" onclick="setTarget('Blockchain Developer')">Blockchain Developer</span>
+                    </div>
+                    <input 
+                        type="text" 
+                        name="target_job" 
+                        id="target_job"
+                        class="form-input"
+                        placeholder="e.g. Full Stack Developer, ML Engineer, DevOps Engineer..."
+                        value="{{ form_data.target_job }}"
+                        required
+                    >
+                </div>
+
+                <!-- Step 3: Experience & Duration -->
+                <div class="form-row">
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <span class="form-step-num">03</span>
+                            <div>
+                                <h3>Experience Level</h3>
+                                <p>How much professional experience do you have?</p>
+                            </div>
+                        </div>
+                        <div class="radio-group">
+                            <label class="radio-card {% if form_data.experience_level == 'beginner' or not form_data %}active{% endif %}">
+                                <input type="radio" name="experience_level" value="beginner" {% if form_data.experience_level == 'beginner' or not form_data %}checked{% endif %}>
+                                <span class="radio-icon">🌱</span>
+                                <span class="radio-label">Beginner</span>
+                                <span class="radio-sub">0-1 years</span>
+                            </label>
+                            <label class="radio-card {% if form_data.experience_level == 'intermediate' %}active{% endif %}">
+                                <input type="radio" name="experience_level" value="intermediate" {% if form_data.experience_level == 'intermediate' %}checked{% endif %}>
+                                <span class="radio-icon">⚡</span>
+                                <span class="radio-label">Intermediate</span>
+                                <span class="radio-sub">1-3 years</span>
+                            </label>
+                            <label class="radio-card {% if form_data.experience_level == 'advanced' %}active{% endif %}">
+                                <input type="radio" name="experience_level" value="advanced" {% if form_data.experience_level == 'advanced' %}checked{% endif %}>
+                                <span class="radio-icon">🚀</span>
+                                <span class="radio-label">Advanced</span>
+                                <span class="radio-sub">3+ years</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-section">
+                        <div class="form-section-header">
+                            <span class="form-step-num">04</span>
+                            <div>
+                                <h3>Timeline Goal</h3>
+                                <p>How long do you have to achieve this goal?</p>
+                            </div>
+                        </div>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="duration" value="3months">
+                                <span class="radio-icon">🏃</span>
+                                <span class="radio-label">3 Months</span>
+                                <span class="radio-sub">Sprint</span>
+                            </label>
+                            <label class="radio-card active">
+                                <input type="radio" name="duration" value="6months" checked>
+                                <span class="radio-icon">🎯</span>
+                                <span class="radio-label">6 Months</span>
+                                <span class="radio-sub">Balanced</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="duration" value="1year">
+                                <span class="radio-icon">📈</span>
+                                <span class="radio-label">1 Year</span>
+                                <span class="radio-sub">Deep Dive</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="duration" value="2years">
+                                <span class="radio-icon">🏆</span>
+                                <span class="radio-label">2 Years</span>
+                                <span class="radio-sub">Mastery</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Submit -->
+                <div class="form-submit">
+                    <button type="submit" class="btn-forge" id="submitBtn">
+                        <span class="forge-icon">⬡</span>
+                        <span class="forge-text">Forge My Roadmap</span>
+                        <span class="forge-arrow">→</span>
+                    </button>
+                    <p class="form-note">✨ AI generates your personalized roadmap in ~10 seconds</p>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-card">
+        <div class="loading-forge">
+            <div class="forge-spinner">⬡</div>
+        </div>
+        <h3>Forging Your Roadmap</h3>
+        <p id="loadingMsg">Analyzing your skill profile...</p>
+        <div class="loading-steps">
+            <div class="ls-item active" id="ls1">🧠 Analyzing skills</div>
+            <div class="ls-item" id="ls2">🔍 Identifying skill gaps</div>
+            <div class="ls-item" id="ls3">📋 Building phases</div>
+            <div class="ls-item" id="ls4">✨ Finalizing roadmap</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function appendSkill(skill) {
+    const ta = document.getElementById('current_skills');
+    if (ta.value) ta.value += ', ' + skill;
+    else ta.value = skill;
+}
+function setTarget(job) {
+    document.getElementById('target_job').value = job;
+}
+
+// Radio card interaction
+document.querySelectorAll('.radio-card').forEach(card => {
+    card.addEventListener('click', function() {
+        const input = this.querySelector('input[type="radio"]');
+        const name = input.name;
+        document.querySelectorAll(`input[name="${name}"]`).forEach(r => {
+            r.closest('.radio-card').classList.remove('active');
+        });
+        this.classList.add('active');
+    });
+});
+
+// Loading overlay
+document.getElementById('roadmapForm').addEventListener('submit', function(e) {
+    const skills = document.getElementById('current_skills').value.trim();
+    const job = document.getElementById('target_job').value.trim();
+    if (!skills || !job) return;
+    
+    document.getElementById('loadingOverlay').style.display = 'flex';
+    
+    const msgs = ['Analyzing your skill profile...', 'Identifying skill gaps...', 'Crafting your phases...', 'Finalizing your roadmap...'];
+    const steps = ['ls1','ls2','ls3','ls4'];
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < msgs.length) {
+            document.getElementById('loadingMsg').textContent = msgs[i];
+            if (i > 0) document.getElementById(steps[i-1]).classList.remove('active');
+            document.getElementById(steps[i]).classList.add('active');
+            document.getElementById(steps[i]).classList.add('done');
+            i++;
+        } else {
+            clearInterval(interval);
+        }
+    }, 2000);
+});
+</script>
+{% endblock %}

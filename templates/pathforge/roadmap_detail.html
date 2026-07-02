@@ -1,0 +1,236 @@
+{% extends 'pathforge/base.html' %}
+{% load static %}
+
+{% block title %}{{ roadmap.title }} — PathForge{% endblock %}
+
+{% block content %}
+<section class="roadmap-page">
+    <!-- Header -->
+    <div class="rm-hero">
+        <div class="rm-hero-bg">
+            <div class="rm-orb rm-orb-1"></div>
+            <div class="rm-orb rm-orb-2"></div>
+        </div>
+        <div class="rm-hero-content">
+            <div class="rm-breadcrumb">
+                <a href="{% url 'home' %}">Home</a> → 
+                <a href="{% url 'generate_roadmap' %}">Generate</a> → 
+                <span>Roadmap</span>
+            </div>
+            <h1 class="rm-title">{{ roadmap.title }}</h1>
+            <p class="rm-overview">{{ roadmap.overview }}</p>
+            
+            <div class="rm-stats-row">
+                <div class="rm-stat">
+                    <div class="rm-stat-value">{{ roadmap.total_weeks }}</div>
+                    <div class="rm-stat-label">Weeks</div>
+                </div>
+                <div class="rm-stat">
+                    <div class="rm-stat-value">{{ roadmap.difficulty_score }}/10</div>
+                    <div class="rm-stat-label">Difficulty</div>
+                </div>
+                <div class="rm-stat">
+                    <div class="rm-stat-value">{{ data.salary_range|default:"₹8L-25L" }}</div>
+                    <div class="rm-stat-label">Salary Range</div>
+                </div>
+                <div class="rm-stat">
+                    <div class="rm-stat-value">{{ data.job_demand|default:"High" }}</div>
+                    <div class="rm-stat-label">Job Demand</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="rm-body">
+        <!-- Key Outcomes -->
+        {% if key_outcomes %}
+        <div class="rm-section">
+            <h2 class="rm-section-title">🎯 Key Outcomes</h2>
+            <div class="outcomes-grid">
+                {% for outcome in key_outcomes %}
+                <div class="outcome-item">
+                    <span class="outcome-check">✓</span>
+                    <span>{{ outcome }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Roadmap Timeline -->
+        <div class="rm-section">
+            <h2 class="rm-section-title">🗺️ Your Learning Journey</h2>
+            <div class="phases-timeline">
+                {% for phase in phases %}
+                <div class="phase-card" data-phase="{{ phase.phase_number }}">
+                    <div class="phase-connector {% if not forloop.last %}has-next{% endif %}"></div>
+                    
+                    <div class="phase-header" onclick="togglePhase({{ phase.phase_number }})">
+                        <div class="phase-badge" style="background: {{ phase.color|default:'#6366f1' }}20; border-color: {{ phase.color|default:'#6366f1' }}40; color: {{ phase.color|default:'#6366f1' }}">
+                            <span class="phase-emoji">{{ phase.icon|default:"📌" }}</span>
+                            <span class="phase-num">Phase {{ phase.phase_number }}</span>
+                        </div>
+                        <div class="phase-meta">
+                            <h3 class="phase-title">{{ phase.title }}</h3>
+                            <div class="phase-info">
+                                <span class="phase-duration">⏱ {{ phase.duration }}</span>
+                                <span class="phase-range">📅 {{ phase.weeks_range }}</span>
+                            </div>
+                        </div>
+                        <div class="phase-toggle">▼</div>
+                    </div>
+
+                    <div class="phase-body active" id="phase-body-{{ phase.phase_number }}">
+                        <p class="phase-description">{{ phase.description }}</p>
+
+                        <!-- Skills -->
+                        {% if phase.skills %}
+                        <div class="phase-skills">
+                            <h4>Skills to Learn</h4>
+                            <div class="skills-grid">
+                                {% for skill in phase.skills %}
+                                <div class="skill-item">
+                                    <div class="skill-item-header">
+                                        <span class="skill-name">{{ skill.name }}</span>
+                                        <span class="skill-type skill-type-{{ skill.type|lower|cut:' ' }}">{{ skill.type }}</span>
+                                    </div>
+                                    <div class="skill-item-meta">
+                                        <span class="skill-hours">⏰ ~{{ skill.hours }}h</span>
+                                        <span class="skill-priority priority-{{ skill.priority|lower|cut:'-' }}">{{ skill.priority }}</span>
+                                    </div>
+                                    {% if skill.resources %}
+                                    <div class="skill-resources">
+                                        {% for res in skill.resources %}
+                                        <span class="resource-tag resource-{{ res.type|lower }}">
+                                            {{ res.type }} · {{ res.title }}
+                                        </span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Projects -->
+                        {% if phase.projects %}
+                        <div class="phase-projects">
+                            <h4>Projects to Build</h4>
+                            <div class="projects-list">
+                                {% for project in phase.projects %}
+                                <div class="project-item">
+                                    <div class="project-header">
+                                        <span class="project-name">💻 {{ project.title }}</span>
+                                        <span class="project-diff diff-{{ project.difficulty|lower }}">{{ project.difficulty }}</span>
+                                    </div>
+                                    <p class="project-desc">{{ project.description }}</p>
+                                    {% if project.skills_used %}
+                                    <div class="project-tags">
+                                        {% for skill in project.skills_used %}
+                                        <span class="proj-tag">{{ skill }}</span>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Milestones -->
+                        {% if phase.milestones %}
+                        <div class="phase-milestones">
+                            <h4>Milestones</h4>
+                            <ul class="milestones-list">
+                                {% for milestone in phase.milestones %}
+                                <li>🏁 {{ milestone }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Two Column Section -->
+        <div class="rm-two-col">
+            <!-- Interview Prep -->
+            {% if interview_prep %}
+            <div class="rm-section rm-card">
+                <h2 class="rm-section-title">🎤 Interview Preparation</h2>
+                {% if interview_prep.topics %}
+                <div class="interview-topics">
+                    <h4>Key Topics</h4>
+                    {% for topic in interview_prep.topics %}
+                    <div class="interview-topic">📌 {{ topic }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+                {% if interview_prep.tips %}
+                <div class="interview-tips">
+                    <h4>Pro Tips</h4>
+                    {% for tip in interview_prep.tips %}
+                    <div class="interview-tip">💡 {{ tip }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <div class="rm-right-col">
+                <!-- Top Companies -->
+                {% if top_companies %}
+                <div class="rm-section rm-card">
+                    <h2 class="rm-section-title">🏢 Top Companies Hiring</h2>
+                    <div class="companies-list">
+                        {% for company in top_companies %}
+                        <div class="company-item">
+                            <span class="company-rank">{{ forloop.counter }}</span>
+                            <span class="company-name">{{ company }}</span>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Certifications -->
+                {% if certifications %}
+                <div class="rm-section rm-card">
+                    <h2 class="rm-section-title">🏅 Recommended Certifications</h2>
+                    {% for cert in certifications %}
+                    <div class="cert-item cert-{{ cert.priority|lower }}">
+                        <div class="cert-name">{{ cert.name }}</div>
+                        <div class="cert-meta">
+                            <span class="cert-provider">{{ cert.provider }}</span>
+                            <span class="cert-priority">{{ cert.priority }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="rm-cta">
+            <h3>Start a New Roadmap</h3>
+            <p>Want a roadmap for a different role or updated skills?</p>
+            <a href="{% url 'generate_roadmap' %}" class="btn-primary">Generate Another Roadmap →</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePhase(num) {
+    const body = document.getElementById('phase-body-' + num);
+    const card = document.querySelector('[data-phase="' + num + '"]');
+    body.classList.toggle('active');
+    card.querySelector('.phase-toggle').textContent = body.classList.contains('active') ? '▲' : '▼';
+}
+</script>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'pathforge/base.html' %}
+{% load static %}
+
+{% block title %}Explore Roadmaps — PathForge{% endblock %}
+
+{% block content %}
+<section class="explore-page">
+    <div class="explore-header">
+        <div class="section-tag">Community Library</div>
+        <h1>Explore Roadmaps</h1>
+        <p>Browse AI-generated career roadmaps created by the community</p>
+    </div>
+    <div class="section-container">
+        {% if roadmaps %}
+        <div class="roadmaps-grid">
+            {% for roadmap in roadmaps %}
+            <a href="{% url 'roadmap_detail' roadmap.id %}" class="roadmap-card">
+                <div class="rc-header">
+                    <div class="rc-icon">🗺️</div>
+                    <div class="rc-meta">
+                        <span class="rc-weeks">{{ roadmap.total_weeks }} weeks</span>
+                        <span class="rc-difficulty">{{ roadmap.difficulty_score }}/10</span>
+                    </div>
+                </div>
+                <h3 class="rc-title">{{ roadmap.title|truncatechars:65 }}</h3>
+                <p class="rc-overview">{{ roadmap.overview|truncatechars:120 }}</p>
+                <div class="rc-footer">
+                    <span class="rc-date">{{ roadmap.created_at|date:"d M Y" }}</span>
+                    <span class="rc-cta">View →</span>
+                </div>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+            <div class="empty-icon">🗺️</div>
+            <h3>No roadmaps yet</h3>
+            <p>Be the first to generate a roadmap!</p>
+            <a href="{% url 'generate_roadmap' %}" class="btn-primary">Generate Roadmap →</a>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

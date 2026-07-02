@@ -1,0 +1,40 @@
+{% extends 'pathforge/base.html' %}
+{% load static %}
+
+{% block title %}About PathForge — AI Career Roadmap Generator{% endblock %}
+
+{% block content %}
+<section class="about-page">
+    <div class="about-hero">
+        <div class="section-tag">About PathForge</div>
+        <h1>The Story Behind PathForge</h1>
+        <p class="about-subtitle">Born from the frustration of generic career advice, PathForge uses cutting-edge AI to
+            build roadmaps as unique as your career goals.</p>
+    </div>
+    <div class="section-container">
+        <div class="about-grid">
+            <div class="about-card">
+                <div class="about-icon">🎯</div>
+                <h3>Our Mission</h3>
+                <p>To eliminate career uncertainty for every tech professional by providing hyper-personalized,
+                    actionable roadmaps powered by AI.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">⚡</div>
+                <h3>Powered by Advanced AI</h3>
+                <p>PathForge leverages Anthropic's Claude AI to analyze skill gaps, market trends, and learning paths —
+                    delivering expert-level career guidance at scale.</p>
+            </div>
+            <div class="about-card">
+                <div class="about-icon">🇮🇳</div>
+                <h3>Built for India</h3>
+                <p>Tailored to the Indian tech market with relevant salary data, in-demand skills, and top companies
+                    actively hiring in India.</p>
+            </div>
+        </div>
+        <div class="about-cta">
+            <a href="{% url 'generate_roadmap' %}" class="btn-primary">Generate Your Roadmap →</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
